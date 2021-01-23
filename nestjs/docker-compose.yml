@@ -1,0 +1,25 @@
+services:
+  hello-world:
+    build:
+      context: ./hello-world
+    expose:
+      - "3000"
+    networks:
+      nestnetwork:
+        aliases:
+          - nestjs-hello-world
+  client:
+    build:
+      context: ./microservice-client
+      network: nestnetwork
+    ports:
+      - "4000:4000"
+    networks:
+      nestnetwork:
+        aliases:
+          - nestjs-client
+    depends_on:
+      - hello-world
+networks:
+  nestnetwork:
+    name: nestnetwork
