@@ -22,7 +22,7 @@ public class MicroserviceclientApplication {
 
 	@GetMapping("/")
 	public String requestHelloworld() {
-		List<ServiceInstance> instances = discoveryClient.getInstances("helloworld");
+		List<ServiceInstance> instances = discoveryClient.getInstances("spring-helloworld");
 		ServiceInstance serviceInstance = instances.get(0);
 		String url = serviceInstance.getUri().toString();
 		// log.Info(url);

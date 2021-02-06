@@ -1,0 +1,36 @@
+services:
+  eureka:
+    build:
+      context: ./eureka
+    expose:
+      - "7000"
+    networks:
+      springnetwork:
+        aliases:
+          - spring-eureka
+  helloworld:
+    build:
+      context: ./helloworld
+    expose:
+      - "6000"
+    networks:
+      springnetwork:
+        aliases:
+          - spring-helloworld
+    depends_on:
+      - eureka
+  client:
+    build:
+      context: ./microserviceclient
+      network: springnetwork
+    ports:
+      - "4000:4000"
+    networks:
+      springnetwork:
+        aliases:
+          - spring-client
+    depends_on:
+      - eureka
+networks:
+  springnetwork:
+    name: springnetwork

@@ -19,5 +19,7 @@ export class AppController {
     // crypto.randomBytes()
     console.log(data.text);
     // console.log(random);
+
+    // TODO: call the getHello here and print the result in the client instead of returning hardcoded text
   }
 }
