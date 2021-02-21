@@ -6,6 +6,11 @@ SPRINGCOMPOSEFILE = spring/docker-compose.yml
 SPRINGOUTPUTCPU = spring/cpustats.txt
 SPRINGOUTPUTMEM = spring/memstats.txt
 
+MICROMAKEFILE = micro/Makefile
+MICROCOMPOSEFILE = micro/docker-compose.yml
+MICROOUTPUTCPU = micro/cpustats.txt
+MICROOUTPUTMEM = micro/memstats.txt
+
 run-nest:
 
 	@echo "Deploying NestJS containers"
@@ -64,3 +69,27 @@ run-spring:
 	docker-compose -f $(SPRINGCOMPOSEFILE) down
 
 # TODO: currently we only record CPU and MEM stats of the hello-world containers, should we use them all?
+
+run-micro:
+	@echo "Deploying Micro container"
+	make -C micro/
+
+	@touch $(MICROOUTPUTCPU)
+	@touch $(MICROOUTPUTMEM)
+
+	# Store cpu usage before running tests
+	@echo "before" > $(MICROOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(MICROCOMPOSEFILE) ps -q server)/cpuacct.stat" >> $(MICROOUTPUTCPU)
+
+	@echo "Running performance tests"
+	k6 run --vus 10 --duration 2s k6/script-micro.js
+
+	# Store total cpu usage after running tests
+	@echo "after" >> $(MICROOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(MICROCOMPOSEFILE) ps -q server)/cpuacct.stat" >> $(MICROOUTPUTCPU)
+
+	# Store max memory used in bytes
+	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(MICROCOMPOSEFILE) ps -q server)/memory.max_usage_in_bytes" > $(MICROOUTPUTMEM)
+
+	@echo "Shutting down Micro container"
+	docker-compose -f $(MICROCOMPOSEFILE) down
