@@ -1,20 +1,12 @@
-import { Controller, Get, Inject } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { Message } from './message.event';
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(
-    @Inject('HELLO_WORLD_SERVICE') private readonly client: ClientProxy,
-  ) {}
-
-  async onApplicationBootstrap() {
-    await this.client.connect();
-  }
+  constructor(private service: AppService) {}
 
   @Get()
-  getHello(): string {
-    this.client.emit<any>('message_printed', new Message('Hello World'));
-    return 'Hello World printed';
+  getHello() {
+    return this.service.getHello();
   }
 }

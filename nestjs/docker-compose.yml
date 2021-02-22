@@ -11,7 +11,7 @@ services:
   client:
     build:
       context: ./microservice-client
-      network: nestnetwork
+      #network: nestnetwork
     ports:
       - "4000:4000"
     networks:

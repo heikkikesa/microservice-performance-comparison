@@ -16,6 +16,8 @@ run-nest:
 	@echo "Deploying NestJS containers"
 	#docker-compose -f $(NESTCOMPOSEFILE) build
 	docker-compose -f $(NESTCOMPOSEFILE) up -d
+	@echo "Waiting for application to boot up"
+	@sleep 10s
 
 	@touch $(NESTOUTPUTCPU)
 	@touch $(NESTOUTPUTMEM)
