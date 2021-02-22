@@ -1,11 +1,30 @@
 services:
+  etcd:
+    image: "bitnami/etcd:latest"
+    container_name: micro_etcd
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://micro-etcd:2379
+    expose:
+      - "2379"
+      - "2380"
+    networks:
+      micronetwork:
+        aliases:
+          - micro-etcd
   helloworld: # not in use currently
     build:
       context: ./helloworld
     container_name: micro_helloworld
     environment:
       MICRO_SERVICE_ADDRESS: micro-helloworld:7000 # maybe 0.0.0.0:7000?
+      MICRO_SERVER_ADDRESS: micro-server:8081
+      MICRO_AUTH_ADDRESS: micro-server:8081
+      MICRO_AUTH_ID: admin
+      MICRO_AUTH_SECRET: micro
       MICRO_BROKER_ADDRESS: micro-server:10001
+      MICRO_REGISTRY: etcd
+      MICRO_REGISTRY_ADDRESS: micro-etcd:2379
     expose:
       - "7000"
     networks:
@@ -18,10 +37,11 @@ services:
     image: micro/micro
     command: server
     container_name: micro_server
-    #environment:
-    #MICRO_SERVER_ADDRESS: 0.0.0.0:8080
-    #MICRO_BROKER_ADDRESS: 0.0.0.0:10001
-    #MICRO_REGISTRY: mdns
+    environment:
+      MICRO_SERVER_ADDRESS: 0.0.0.0:8080
+      MICRO_BROKER_ADDRESS: 0.0.0.0:10001
+      MICRO_REGISTRY: etcd
+      MICRO_REGISTRY_ADDRESS: micro-etcd:2379
     ports:
       - "4000:8080"
       - "8081:8081/tcp"
@@ -32,6 +52,8 @@ services:
       micronetwork:
         aliases:
           - micro-server
+    depends_on:
+      - etcd
 networks:
   micronetwork:
     name: micronetwork
