@@ -23,18 +23,25 @@ run-nest:
 	@touch $(NESTOUTPUTMEM)
 
 	# Store cpu usage before running tests
-	@echo "before" > $(NESTOUTPUTCPU)
+	@echo "hello-world before" > $(NESTOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q hello-world)/cpuacct.stat" >> $(NESTOUTPUTCPU)
+	@echo "client before" >> $(NESTOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q client)/cpuacct.stat" >> $(NESTOUTPUTCPU)
 
 	@echo "Running performance tests"
 	k6 run --vus 10 --duration 2s k6/script.js
 
 	# Store total cpu usage after running tests
-	@echo "after" >> $(NESTOUTPUTCPU)
+	@echo "hello-world after" >> $(NESTOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q hello-world)/cpuacct.stat" >> $(NESTOUTPUTCPU)
+	@echo "client after" >> $(NESTOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q client)/cpuacct.stat" >> $(NESTOUTPUTCPU)
 
 	# Store max memory used in bytes
-	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q hello-world)/memory.max_usage_in_bytes" > $(NESTOUTPUTMEM)
+	@echo "hello-world" > $(NESTOUTPUTMEM)
+	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q hello-world)/memory.max_usage_in_bytes" >> $(NESTOUTPUTMEM)
+	@echo "client" >> $(NESTOUTPUTMEM)
+	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q client)/memory.max_usage_in_bytes" >> $(NESTOUTPUTMEM)
 
 	@echo "Shutting down NestJS containers"
 	docker-compose -f $(NESTCOMPOSEFILE) down
@@ -54,18 +61,31 @@ run-spring:
 	@sleep 90s
 
 	# Store cpu usage before running tests
-	@echo "before" > $(SPRINGOUTPUTCPU)
+	@echo "helloworld before" > $(SPRINGOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q helloworld)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
+	@echo "client before" >> $(SPRINGOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q client)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
+	@echo "eureka before" >> $(SPRINGOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q eureka)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
 
 	@echo "Running performance tests"
 	k6 run --vus 10 --duration 2s k6/script.js
 
 	# Store total cpu usage after running tests
-	@echo "after" >> $(SPRINGOUTPUTCPU)
+	@echo "helloworld after" >> $(SPRINGOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q helloworld)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
+	@echo "client after" >> $(SPRINGOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q client)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
+	@echo "eureka after" >> $(SPRINGOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q eureka)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
 
 	# Store max memory used in bytes
-	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q helloworld)/memory.max_usage_in_bytes" > $(SPRINGOUTPUTMEM)
+	@echo "helloworld" > $(SPRINGOUTPUTMEM)
+	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q helloworld)/memory.max_usage_in_bytes" >> $(SPRINGOUTPUTMEM)
+	@echo "client" >> $(SPRINGOUTPUTMEM)
+	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q client)/memory.max_usage_in_bytes" >> $(SPRINGOUTPUTMEM)
+	@echo "eureka" >> $(SPRINGOUTPUTMEM)
+	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q eureka)/memory.max_usage_in_bytes" >> $(SPRINGOUTPUTMEM)
 
 	@echo "Shutting down Spring containers"
 	docker-compose -f $(SPRINGCOMPOSEFILE) down
