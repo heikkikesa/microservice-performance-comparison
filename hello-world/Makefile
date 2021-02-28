@@ -25,8 +25,8 @@ run-nest:
 	# Store cpu usage before running tests
 	@echo "hello-world before" > $(NESTOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q hello-world)/cpuacct.stat" >> $(NESTOUTPUTCPU)
-	@echo "client before" >> $(NESTOUTPUTCPU)
-	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q client)/cpuacct.stat" >> $(NESTOUTPUTCPU)
+	@echo "gateway before" >> $(NESTOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q gateway)/cpuacct.stat" >> $(NESTOUTPUTCPU)
 
 	@echo "Running performance tests"
 	k6 run --vus 10 --duration 2s k6/script.js
@@ -34,14 +34,14 @@ run-nest:
 	# Store total cpu usage after running tests
 	@echo "hello-world after" >> $(NESTOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q hello-world)/cpuacct.stat" >> $(NESTOUTPUTCPU)
-	@echo "client after" >> $(NESTOUTPUTCPU)
-	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q client)/cpuacct.stat" >> $(NESTOUTPUTCPU)
+	@echo "gateway after" >> $(NESTOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q gateway)/cpuacct.stat" >> $(NESTOUTPUTCPU)
 
 	# Store max memory used in bytes
 	@echo "hello-world" > $(NESTOUTPUTMEM)
 	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q hello-world)/memory.max_usage_in_bytes" >> $(NESTOUTPUTMEM)
-	@echo "client" >> $(NESTOUTPUTMEM)
-	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q client)/memory.max_usage_in_bytes" >> $(NESTOUTPUTMEM)
+	@echo "gateway" >> $(NESTOUTPUTMEM)
+	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q gateway)/memory.max_usage_in_bytes" >> $(NESTOUTPUTMEM)
 
 	@echo "Shutting down NestJS containers"
 	docker-compose -f $(NESTCOMPOSEFILE) down
@@ -63,8 +63,8 @@ run-spring:
 	# Store cpu usage before running tests
 	@echo "helloworld before" > $(SPRINGOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q helloworld)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
-	@echo "client before" >> $(SPRINGOUTPUTCPU)
-	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q client)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
+	@echo "gateway before" >> $(SPRINGOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q gateway)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
 	@echo "eureka before" >> $(SPRINGOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q eureka)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
 
@@ -74,16 +74,16 @@ run-spring:
 	# Store total cpu usage after running tests
 	@echo "helloworld after" >> $(SPRINGOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q helloworld)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
-	@echo "client after" >> $(SPRINGOUTPUTCPU)
-	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q client)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
+	@echo "gateway after" >> $(SPRINGOUTPUTCPU)
+	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q gateway)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
 	@echo "eureka after" >> $(SPRINGOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q eureka)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
 
 	# Store max memory used in bytes
 	@echo "helloworld" > $(SPRINGOUTPUTMEM)
 	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q helloworld)/memory.max_usage_in_bytes" >> $(SPRINGOUTPUTMEM)
-	@echo "client" >> $(SPRINGOUTPUTMEM)
-	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q client)/memory.max_usage_in_bytes" >> $(SPRINGOUTPUTMEM)
+	@echo "gateway" >> $(SPRINGOUTPUTMEM)
+	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q gateway)/memory.max_usage_in_bytes" >> $(SPRINGOUTPUTMEM)
 	@echo "eureka" >> $(SPRINGOUTPUTMEM)
 	@cat "/sys/fs/cgroup/memory/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q eureka)/memory.max_usage_in_bytes" >> $(SPRINGOUTPUTMEM)
 

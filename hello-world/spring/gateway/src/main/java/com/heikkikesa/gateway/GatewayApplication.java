@@ -1,4 +1,4 @@
-package com.heikkikesa.microserviceclient;
+package com.heikkikesa.gateway;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,12 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @RestController
-public class MicroserviceclientApplication {
+public class GatewayApplication {
 	@Autowired
 	private DiscoveryClient discoveryClient;
 
 	public static void main(String[] args) {
-		SpringApplication.run(MicroserviceclientApplication.class, args);
+		SpringApplication.run(GatewayApplication.class, args);
 	}
 
 	@GetMapping("/")
@@ -25,11 +25,8 @@ public class MicroserviceclientApplication {
 		List<ServiceInstance> instances = discoveryClient.getInstances("spring-helloworld");
 		ServiceInstance serviceInstance = instances.get(0);
 		String url = serviceInstance.getUri().toString();
-		// log.Info(url);
-		// System.out.println(url);
 		RestTemplate restTemplate = new RestTemplate();
 		HelloworldObject helloworldObject = restTemplate.getForObject(url, HelloworldObject.class);
-		// System.out.println(helloworldObject.getData());
 		
 		return helloworldObject.getData();
 	}

@@ -1,4 +1,4 @@
-package com.heikkikesa.microserviceclient;
+package com.heikkikesa.gateway;
 
 public class HelloworldObject {
     private String data;

@@ -19,16 +19,16 @@ services:
           - spring-helloworld
     depends_on:
       - eureka
-  client:
+  gateway:
     build:
-      context: ./microserviceclient
+      context: ./gateway
       network: springnetwork
     ports:
       - "4000:4000"
     networks:
       springnetwork:
         aliases:
-          - spring-client
+          - spring-gateway
     depends_on:
       - eureka
 networks:

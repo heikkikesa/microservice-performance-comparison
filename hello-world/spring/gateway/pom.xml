@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.heikkikesa</groupId>
-	<artifactId>microserviceclient</artifactId>
+	<artifactId>gateway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>microserviceclient</name>
+	<name>gateway</name>
 	<description>Microservice performance evaluation client</description>
 	<properties>
 		<java.version>11</java.version>

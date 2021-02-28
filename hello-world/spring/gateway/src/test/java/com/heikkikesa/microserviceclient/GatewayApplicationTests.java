@@ -1,10 +1,10 @@
-package com.heikkikesa.microserviceclient;
+package com.heikkikesa.gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MicroserviceclientApplicationTests {
+class GatewayApplicationTests {
 
 	@Test
 	void contextLoads() {

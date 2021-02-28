@@ -8,16 +8,15 @@ services:
       nestnetwork:
         aliases:
           - nestjs-hello-world
-  client:
+  gateway:
     build:
-      context: ./microservice-client
-      #network: nestnetwork
+      context: ./gateway
     ports:
       - "4000:4000"
     networks:
       nestnetwork:
         aliases:
-          - nestjs-client
+          - nestjs-gateway
     depends_on:
       - hello-world
 networks:
