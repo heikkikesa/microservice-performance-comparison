@@ -5,6 +5,7 @@ NESTOUTPUTMEM = nestjs/memstats.txt
 SPRINGCOMPOSEFILE = spring/docker-compose.yml
 SPRINGOUTPUTCPU = spring/cpustats.txt
 SPRINGOUTPUTMEM = spring/memstats.txt
+SPRINGTOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJNaWNyb3NlcnZpY2UgRnJhbWV3b3JrIFBlcmZvcm1hbmNlIENvbXBhcmlzb24iLCJpYXQiOjE2MTQ5NTI5MTAsImV4cCI6MTY0NjQ5MzE0MCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiZHVtbXlAdXNlci5mb28iLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl19.C0rQRbXtsZG45z_SbbltT6CyWP9PFBnUzmUR6pQVpyE"
 
 MICROMAKEFILE = micro/Makefile
 MICROCOMPOSEFILE = micro/docker-compose.yml
@@ -29,7 +30,7 @@ run-nest:
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q gateway)/cpuacct.stat" >> $(NESTOUTPUTCPU)
 
 	@echo "Running performance tests"
-	k6 run --vus 10 --duration 2s ../k6/hello-world/script.js
+	k6 run --vus 10 --duration 2s ../k6/real-world/script.js
 
 	# Store total cpu usage after running tests
 	@echo "hello-world after" >> $(NESTOUTPUTCPU)
@@ -69,7 +70,7 @@ run-spring:
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q eureka)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
 
 	@echo "Running performance tests"
-	k6 run --vus 10 --duration 2s ../k6/hello-world/script.js
+	k6 run --vus 10 --duration 2s ../k6/real-world/script.js
 
 	# Store total cpu usage after running tests
 	@echo "helloworld after" >> $(SPRINGOUTPUTCPU)
@@ -104,7 +105,7 @@ run-micro:
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(MICROCOMPOSEFILE) ps -q server)/cpuacct.stat" >> $(MICROOUTPUTCPU)
 
 	@echo "Running performance tests"
-	k6 run --vus 10 --duration 2s ../k6/hello-world/script-micro.js
+	k6 run --vus 10 --duration 2s ../k6/real-world/script-micro.js
 
 	# Store total cpu usage after running tests
 	@echo "after" >> $(MICROOUTPUTCPU)
