@@ -7,7 +7,7 @@ export let options = {
 };
 
 export default function () {
-  http.get("http://localhost:4000/helloworld");
+  http.get("http://localhost:4000");
   sleep(1);
 }
 
@@ -15,6 +15,6 @@ export function handleSummary(data) {
   console.log("Preparing the end-of-test summary...");
 
   return {
-    "micro/k6-summary.json": JSON.stringify(data),
+    "nestjs/k6-summary.json": JSON.stringify(data),
   };
 }

@@ -1,3 +1,4 @@
 **/cpustats.txt
 **/memstats.txt
+**/k6-summary.json
 .vscode/

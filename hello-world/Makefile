@@ -1,15 +1,18 @@
 NESTCOMPOSEFILE = nestjs/docker-compose.yml
 NESTOUTPUTCPU = nestjs/cpustats.txt
 NESTOUTPUTMEM = nestjs/memstats.txt
+NESTOUTPUTK6 = nestjs/k6-summary.json
 
 SPRINGCOMPOSEFILE = spring/docker-compose.yml
 SPRINGOUTPUTCPU = spring/cpustats.txt
 SPRINGOUTPUTMEM = spring/memstats.txt
+SPRINGOUTPUTK6 = spring/k6-summary.json
 
 MICROMAKEFILE = micro/Makefile
 MICROCOMPOSEFILE = micro/docker-compose.yml
 MICROOUTPUTCPU = micro/cpustats.txt
 MICROOUTPUTMEM = micro/memstats.txt
+MICROOUTPUTK6 = micro/k6-summary.json
 
 run-nest:
 
@@ -21,6 +24,7 @@ run-nest:
 
 	@touch $(NESTOUTPUTCPU)
 	@touch $(NESTOUTPUTMEM)
+	@touch $(NESTOUTPUTK6)
 
 	# Store cpu usage before running tests
 	@echo "hello-world before" > $(NESTOUTPUTCPU)
@@ -29,7 +33,7 @@ run-nest:
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(NESTCOMPOSEFILE) ps -q gateway)/cpuacct.stat" >> $(NESTOUTPUTCPU)
 
 	@echo "Running performance tests"
-	k6 run --vus 10 --duration 2s ../k6/hello-world/script.js
+	k6 run ../k6/hello-world/script-nestjs.js
 
 	# Store total cpu usage after running tests
 	@echo "hello-world after" >> $(NESTOUTPUTCPU)
@@ -55,6 +59,7 @@ run-spring:
 
 	@touch $(SPRINGOUTPUTCPU)
 	@touch $(SPRINGOUTPUTMEM)
+	@touch $(SPRINGOUTPUTK6)
 
 	# wait for all of the applications to register with Eureka
 	@echo "Waiting for application to register with Eureka"
@@ -69,7 +74,7 @@ run-spring:
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(SPRINGCOMPOSEFILE) ps -q eureka)/cpuacct.stat" >> $(SPRINGOUTPUTCPU)
 
 	@echo "Running performance tests"
-	k6 run --vus 10 --duration 2s ../k6/hello-world/script.js
+	k6 run ../k6/hello-world/script-spring.js
 
 	# Store total cpu usage after running tests
 	@echo "helloworld after" >> $(SPRINGOUTPUTCPU)
@@ -98,13 +103,14 @@ run-micro:
 
 	@touch $(MICROOUTPUTCPU)
 	@touch $(MICROOUTPUTMEM)
+	@touch $(MICROOUTPUTK6)
 
 	# Store cpu usage before running tests
 	@echo "before" > $(MICROOUTPUTCPU)
 	@cat "/sys/fs/cgroup/cpu,cpuacct/docker/$$(docker-compose -f $(MICROCOMPOSEFILE) ps -q server)/cpuacct.stat" >> $(MICROOUTPUTCPU)
 
 	@echo "Running performance tests"
-	k6 run --vus 10 --duration 2s ../k6/hello-world/script-micro.js
+	k6 run ../k6/hello-world/script-micro.js
 
 	# Store total cpu usage after running tests
 	@echo "after" >> $(MICROOUTPUTCPU)
