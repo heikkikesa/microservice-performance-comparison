@@ -7,7 +7,10 @@ export let options = {
 };
 
 export default function () {
-  http.get("http://localhost:4000/helloworld");
+  let res = http.get("http://localhost:4000/helloworld");
+  check(res, {
+    "is status 200": (r) => r.status === 200,
+  });
   sleep(1);
 }
 
