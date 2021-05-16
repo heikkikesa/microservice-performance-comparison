@@ -1,10 +1,19 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
 
+/*
+export let options = {
+  vus: 10,
+  iterations: 100,
+};
+const sleepTime = 1;
+*/
+
 export let options = {
   vus: 100,
-  duration: "10s",
+  iterations: 10000,
 };
+const sleepTime = 0.5;
 
 export default function () {
   // Token expires by 8.3.2025
@@ -33,7 +42,7 @@ export default function () {
   check(res, {
     "is status 200": (r) => r.status === 200,
   });
-  sleep(1);
+  sleep(sleepTime);
 }
 
 export function handleSummary(data) {

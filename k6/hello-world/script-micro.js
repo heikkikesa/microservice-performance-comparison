@@ -1,17 +1,26 @@
 import http from "k6/http";
-import { sleep } from "k6";
+import { check, sleep } from "k6";
 
+/*
 export let options = {
   vus: 10,
-  duration: "10s",
+  iterations: 100,
 };
+const sleepTime = 1;
+*/
+
+export let options = {
+  vus: 100,
+  iterations: 10000,
+};
+const sleepTime = 0.5;
 
 export default function () {
   let res = http.get("http://localhost:4000/helloworld");
   check(res, {
     "is status 200": (r) => r.status === 200,
   });
-  sleep(1);
+  sleep(sleepTime);
 }
 
 export function handleSummary(data) {

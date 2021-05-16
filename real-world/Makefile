@@ -17,7 +17,7 @@ MICROOUTPUTK6 = micro/k6-summary.json
 run-nest:
 
 	@echo "Deploying NestJS containers"
-	#docker-compose -f $(NESTCOMPOSEFILE) build
+	docker-compose -f $(NESTCOMPOSEFILE) build
 	docker-compose -f $(NESTCOMPOSEFILE) up -d
 	@echo "Waiting for application to boot up"
 	@sleep 10s
@@ -54,7 +54,7 @@ run-nest:
 run-spring:
 
 	@echo "Deploying Spring containers"
-	#docker-compose -f $(SPRINGCOMPOSEFILE) build
+	docker-compose -f $(SPRINGCOMPOSEFILE) build
 	docker-compose -f $(SPRINGCOMPOSEFILE) up -d
 
 	@touch $(SPRINGOUTPUTCPU)
@@ -103,6 +103,10 @@ run-micro:
 	@touch $(MICROOUTPUTCPU)
 	@touch $(MICROOUTPUTMEM)
 	@touch $(MICROOUTPUTK6)
+
+	# wait for the service to register with server
+	@echo "Waiting for the service to register with server"
+	@sleep 30s
 
 	# Store cpu usage before running tests
 	@echo "before" > $(MICROOUTPUTCPU)
